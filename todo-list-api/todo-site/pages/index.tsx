@@ -6,11 +6,12 @@ import TaskItem from "../components/taskItem";
 import { v4 as uuidv4 } from "uuid";
 
 const Home: NextPage = () => {
-  // TODO: Update this URL to your own API endpoint!
-  const todoApiEndpoint: string =
-    "https://xis4oapstrtbfudsir76k7ozbq0eyezq.lambda-url.us-west-1.on.aws";
+  // TODO: Actualiza esta URL con la URL de Render después del despliegue del backend
+  // Ejemplo: https://todo-api.onrender.com
+  const todoApiEndpoint: string = " https://idveyvxcm62ooxrvtpi67mid740fnzhx.lambda-url.us-west-1.on.aws/";
 
-  const userId: string = "edfdez";
+  // Actualizar  el userId 
+  const userId: string = "Eduardo_Fdez";
   const [isLoading, setIsLoading] = React.useState(true);
   const [tasks, setTasks] = React.useState<Task[]>([]);
   const [newTaskContent, setNewTaskContent] = React.useState("");

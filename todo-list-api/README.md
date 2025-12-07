@@ -85,3 +85,52 @@ You can run the test like this (but you have to have `pytest` installed):
 ```bash
 pytest
 ```
+
+## Despliegue en Render
+
+### Backend (API)
+
+1. **Crea un nuevo Web Service en Render**
+   - Ve a [Render Dashboard](https://dashboard.render.com/)
+   - Click en "New +" → "Web Service"
+   - Conecta tu repositorio de GitHub
+   - Selecciona la carpeta `/api`
+
+2. **Configuración del servicio:**
+   - **Name**: `todo-api`
+   - **Runtime**: Python 3
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `uvicorn todo:app --host 0.0.0.0 --port $PORT`
+
+3. **Variables de entorno:**
+   - `TABLE_NAME`: El nombre de tu tabla DynamoDB
+   - `AWS_ACCESS_KEY_ID`: Tu AWS Access Key
+   - `AWS_SECRET_ACCESS_KEY`: Tu AWS Secret Key
+   - `AWS_DEFAULT_REGION`: La región de AWS (ej: us-west-1)
+
+4. **Deploy**: Click en "Create Web Service"
+
+### Frontend (Todo-Site)
+
+1. **Actualiza el API endpoint**
+   - En `todo-site/pages/index.tsx`, actualiza `todoApiEndpoint` con la URL de tu backend en Render
+
+2. **Crea un Static Site en Render**
+   - Ve a [Render Dashboard](https://dashboard.render.com/)
+   - Click en "New +" → "Static Site"
+   - Conecta tu repositorio
+   - Selecciona la carpeta `/todo-site`
+
+3. **Configuración del servicio:**
+   - **Name**: `todo-frontend`
+   - **Build Command**: `npm install && npm run build`
+   - **Publish Directory**: `out`
+
+4. **Deploy**: Click en "Create Static Site"
+
+### Notas importantes:
+
+- El backend necesita acceso a DynamoDB, asegúrate de que las credenciales AWS tengan los permisos necesarios
+- Actualiza la URL del API en el frontend después del primer despliegue del backend
+- Ambos servicios se pueden desplegar de forma independiente
+- Render ofrece un plan gratuito con limitaciones, considera upgrade para producción

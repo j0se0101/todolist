@@ -13,12 +13,14 @@ export class TodoInfraStack extends Stack {
 
     // Create DDB table to store the tasks.
     const table = new ddb.Table(this, "Tasks", {
-      partitionKey: { name: "task_id", type: ddb.AttributeType.STRING },
+      partitionKey: { name: "user_id", type: ddb.AttributeType.STRING },
+      sortKey: { name: "task_id", type: ddb.AttributeType.STRING },
       billingMode: ddb.BillingMode.PAY_PER_REQUEST,
       timeToLiveAttribute: "ttl",
+      removalPolicy: RemovalPolicy.DESTROY,
     });
 
-    // Add GSI based on user_id.
+    // Add GSI based on created_time for sorting
     table.addGlobalSecondaryIndex({
       indexName: "user-index",
       partitionKey: { name: "user_id", type: ddb.AttributeType.STRING },
@@ -29,6 +31,7 @@ export class TodoInfraStack extends Stack {
     const websiteBucket = new s3.Bucket(this, "TodoSiteBucket", {
       websiteIndexDocument: "index.html",
       removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true, // ← Esto permite vaciar el bucket automáticamente
       publicReadAccess: true,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
       accessControl: s3.BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
